@@ -1,0 +1,68 @@
+server:
+  port: 8000
+
+spring:
+  application:
+    name: gateway-server
+  cloud:
+    gateway:
+      routes:
+        # auth
+        - id: auth-service
+          uri: http://localhost:8081/
+          predicates:
+            - Path=api/auth-service/**
+          filters:
+            - RewritePath=/auth-service/?(?<segment>.*), /$\{segment}
+
+        # user
+        - id: user-service
+          uri: http://localhost:8082/
+          predicates:
+            - Path=api/user-service/**
+          filters:
+            - RewritePath=/user-service/?(?<segment>.*), /$\{segment}
+
+        # pr
+        - id: pr-service
+          uri: http://localhost:8082/
+          predicates:
+            - Path=api/pr-service/**
+          filters:
+            - RewritePath=/pr-service/?(?<segment>.*), /$\{segment}
+
+        # rfq
+        - id: rfq-service
+          uri: http://localhost:8082/
+          predicates:
+            - Path=api/rfq-service/**
+          filters:
+            - RewritePath=/rfq-service/?(?<segment>.*), /$\{segment}
+
+        # po
+        - id: po-service
+          uri: http://localhost:8082/
+          predicates:
+            - Path=api/po-service/**
+          filters:
+            - RewritePath=/po-service/?(?<segment>.*), /$\{segment}
+
+        # scc / mobile
+        - id: scc-service
+          uri: http://localhost:8082/
+          predicates:
+            - Path=scc-service/**
+          filters:
+            - RewritePath=/scc-service/?(?<segment>.*), /$\{segment}
+
+# Eureka
+eureka:
+  instance:
+    prefer-ip-address: true
+    ip-address: 13.208.160.27
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://13.208.124.73:8761/eureka/
+    registryFetchIntervalSeconds: 5
