@@ -1,4 +1,4 @@
-package com.example.gatewayserver.customfilter;
+package com.example.gatewayserver.filters;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -27,5 +27,20 @@ public class JwtValidation {
                             .getBody();
 
         return claims.getSubject();
+    }
+
+    /**
+     * JWT Token 검증(디코딩, 파싱 및 위조여부 확인) 메서드
+     *
+     * @param token 검증하려는 JWT Token
+     * @return 검증된 userInfo 또는 예외
+     */
+    public Claims validateAndGetUserInfo(String token) {
+        Claims claims = Jwts.parser()
+                            .setSigningKey(SECRET_KEY)
+                            .parseClaimsJws(token)
+                            .getBody();
+
+        return claims;
     }
 }

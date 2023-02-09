@@ -1,11 +1,14 @@
-package com.example.gatewayserver.customfilter;
+package com.example.gatewayserver.filters;
 
+import io.jsonwebtoken.Claims;
 import java.util.Objects;
 import lombok.extern.slf4j.Slf4j;
+import org.json.JSONObject;
 import org.springframework.cloud.gateway.filter.GatewayFilter;
 import org.springframework.cloud.gateway.filter.factory.AbstractGatewayFilterFactory;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseCookie;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.http.server.reactive.ServerHttpResponse;
 
@@ -15,6 +18,7 @@ import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
 /**
+ * CustomFilter
  * 토큰 확인 필터
  */
 @Slf4j
@@ -31,7 +35,8 @@ public class AuthorizationHeaderFilter extends AbstractGatewayFilterFactory<Auth
     public GatewayFilter apply(Config config) {
         return ((exchange, chain) -> {
             ServerHttpRequest request = exchange.getRequest(); // Pre Filter
-            log.info("Custom Pre filter: request id -> {}", request.getId());
+            ServerHttpResponse response = exchange.getResponse(); // Post Filter
+            log.info("AuthorizationHeaderFilter Pre filter: request id -> {}", request.getId());
 
             // Request Header 에 token 이 존재하지 않는 경우
             if (!request.getHeaders().containsKey(HttpHeaders.AUTHORIZATION)) {
@@ -40,12 +45,11 @@ public class AuthorizationHeaderFilter extends AbstractGatewayFilterFactory<Auth
 
             try {
                 // 토큰 유효성 확인
-                String authorization = Objects.requireNonNull(request.getHeaders().get(HttpHeaders.AUTHORIZATION))
-                                              .get(0);
+                String authorization = Objects.requireNonNull(request.getHeaders().get(HttpHeaders.AUTHORIZATION)).get(0);
                 String token = authorization.replace("Bearer", "").trim();
 
-                String userInfo = jwtValidation.validateAndGetEmail(token);
-                log.info("Authenticated user info(email) : " + userInfo);
+                Claims userInfo = jwtValidation.validateAndGetUserInfo(token);
+                log.info("Authenticated user info : " + userInfo.toString());
 
                 return chain.filter(exchange);
             } catch (Exception e) {
@@ -58,7 +62,7 @@ public class AuthorizationHeaderFilter extends AbstractGatewayFilterFactory<Auth
         ServerHttpResponse response = exchange.getResponse(); // Post Filter
 
         response.setStatusCode(httpStatus);
-        log.info("Custom Post filter: response code -> {}", response.getStatusCode());
+        log.info("AuthorizationHeaderFilter Post filter: response code -> {}", response.getStatusCode());
 
         return response.setComplete();
     }
