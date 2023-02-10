@@ -3,12 +3,10 @@ package com.example.gatewayserver.filters;
 import io.jsonwebtoken.Claims;
 import java.util.Objects;
 import lombok.extern.slf4j.Slf4j;
-import org.json.JSONObject;
 import org.springframework.cloud.gateway.filter.GatewayFilter;
 import org.springframework.cloud.gateway.filter.factory.AbstractGatewayFilterFactory;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseCookie;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.http.server.reactive.ServerHttpResponse;
 
