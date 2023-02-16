@@ -11,7 +11,7 @@ spring:
         - id: auth-service
           predicates:
             - Path=/api/auth-service/**
-          uri: http://localhost:8080
+          uri: lb://auth-service
           filters:
             - RewritePath=/api/auth-service/?(?<segment>.*), /$\{segment}
 
@@ -19,7 +19,7 @@ spring:
         - id: user-service
           predicates:
             - Path=/api/user-service/**
-          uri: http://localhost:8080
+          uri: lb://user-service
           filters:
               - RewritePath=/api/user-service/?(?<segment>.*), /$\{segment}
               - AuthorizationHeaderFilter
@@ -28,7 +28,7 @@ spring:
         - id: pr-service
           predicates:
             - Path=/api/pr-service/**
-          uri: http://localhost:8080
+          uri: lb://pr-service
           filters:
             - RewritePath=/api/pr-service/?(?<segment>.*), /$\{segment}
             - AuthorizationHeaderFilter
@@ -37,7 +37,7 @@ spring:
         - id: rfq-service
           predicates:
             - Path=/api/rfq-service/**
-          uri: http://localhost:8080
+          uri: lb://rfq-service
           filters:
             - RewritePath=/api/rfq-service/?(?<segment>.*), /$\{segment}
             - AuthorizationHeaderFilter
@@ -46,7 +46,7 @@ spring:
         - id: po-service
           predicates:
             - Path=/api/po-service/**
-          uri: http://localhost:8080
+          uri: lb://po-service
           filters:
             - RewritePath=/api/po-service/?(?<segment>.*), /$\{segment}
             - AuthorizationHeaderFilter
@@ -55,7 +55,7 @@ spring:
         - id: scc-service
           predicates:
             - Path=/api/scc-service/**
-          uri: http://localhost:8080
+          uri: lb://scc-service
           filters:
             - RewritePath=/api/scc-service/?(?<segment>.*), /$\{segment}
             - AuthorizationHeaderFilter
