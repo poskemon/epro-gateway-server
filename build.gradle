@@ -30,6 +30,10 @@ dependencies {
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     // Eureka-client
     implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
+    // jwt
+    implementation group: 'io.jsonwebtoken', name: 'jjwt', version: '0.9.1'
+    implementation group: 'javax.xml.bind', name: 'jaxb-api', version: '2.3.1'
+
 }
 
 dependencyManagement {

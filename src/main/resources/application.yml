@@ -9,57 +9,62 @@ spring:
       routes:
         # auth
         - id: auth-service
-          uri: http://localhost:8081/
           predicates:
-            - Path=api/auth-service/**
+            - Path=/api/auth-service/**
+          uri: lb://auth-service
           filters:
-            - RewritePath=/auth-service/?(?<segment>.*), /$\{segment}
+            - RewritePath=/api/auth-service/?(?<segment>.*), /$\{segment}
 
         # user
         - id: user-service
-          uri: http://localhost:8082/
           predicates:
-            - Path=api/user-service/**
+            - Path=/api/user-service/**
+          uri: lb://user-service
           filters:
-            - RewritePath=/user-service/?(?<segment>.*), /$\{segment}
+              - RewritePath=/api/user-service/?(?<segment>.*), /$\{segment}
+              - AuthorizationHeaderFilter
 
         # pr
         - id: pr-service
-          uri: http://localhost:8082/
           predicates:
-            - Path=api/pr-service/**
+            - Path=/api/pr-service/**
+          uri: lb://pr-service
           filters:
-            - RewritePath=/pr-service/?(?<segment>.*), /$\{segment}
+            - RewritePath=/api/pr-service/?(?<segment>.*), /$\{segment}
+            - AuthorizationHeaderFilter
 
         # rfq
         - id: rfq-service
-          uri: http://localhost:8082/
           predicates:
-            - Path=api/rfq-service/**
+            - Path=/api/rfq-service/**
+          uri: lb://rfq-service
           filters:
-            - RewritePath=/rfq-service/?(?<segment>.*), /$\{segment}
+            - RewritePath=/api/rfq-service/?(?<segment>.*), /$\{segment}
+            - AuthorizationHeaderFilter
 
         # po
         - id: po-service
-          uri: http://localhost:8082/
           predicates:
-            - Path=api/po-service/**
+            - Path=/api/po-service/**
+          uri: lb://po-service
           filters:
-            - RewritePath=/po-service/?(?<segment>.*), /$\{segment}
+            - RewritePath=/api/po-service/?(?<segment>.*), /$\{segment}
+            - AuthorizationHeaderFilter
 
         # scc / mobile
         - id: scc-service
-          uri: http://localhost:8082/
           predicates:
-            - Path=scc-service/**
+            - Path=/api/scc-service/**
+          uri: lb://scc-service
           filters:
-            - RewritePath=/scc-service/?(?<segment>.*), /$\{segment}
+            - RewritePath=/api/scc-service/?(?<segment>.*), /$\{segment}
+            - AuthorizationHeaderFilter
 
 # Eureka
 eureka:
   instance:
     prefer-ip-address: true
-    ip-address: 13.208.160.27
+#    ip-address: 13.208.160.27
   client:
     register-with-eureka: true
     fetch-registry: true
